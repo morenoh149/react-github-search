@@ -31,12 +31,6 @@
          */
         const searchGithub = (e, setRepositories, repositories) => {
           e.preventDefault();
-          if (searchStr !== query) {
-            // clear results with new search
-            setQuery(searchStr);
-            setRepositories([]);
-            repositories = [];
-          }
           fetch(`https://api.github.com/search/repositories?q=${
             searchStr
           }&sort=stars&page=${
@@ -44,7 +38,13 @@
           }&order=desc&per_page=${per_page}`)
           .then(response => response.json())
           .then(data => {
-            console.log('gh res', data);
+            console.log(searchStr, data);
+            if (searchStr !== query) {
+              // clear results with new search
+              setQuery(searchStr);
+              setRepositories([]);
+              repositories = [];
+            }
             setRepositories(repositories.concat(data.items));
             setPage(page+1);
             setTotal(data.total_count);
