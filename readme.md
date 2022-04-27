@@ -1,4 +1,4 @@
-![](demo.mp4)
+![](demo.gif)
 
 ## Serve locally
 
