@@ -18,21 +18,19 @@
       import React, {useState} from 'https://cdn.skypack.dev/react@17';
       import ReactDOM from 'https://cdn.skypack.dev/react-dom@17';
 
-      const SearchForm = ({setRepositories, page, setPage, repositories }) => {
+      const SearchForm = ({setRepositories, repositories }) => {
         const [searchStr, setSearchStr] = useState('');
         const [query, setQuery] = useState('');
         const [total, setTotal] = useState(0);
+        const [page, setPage] = useState(1);
         const per_page = 30; // 30
-        let disableLoadMore = page * per_page >= total;
+        let disableLoadMore = (page-1) * per_page >= total;
 
         /*
          * searchGithub cb for search button
          */
-        const searchGithub = (e, setRepositories, page, setPage, repositories) => {
+        const searchGithub = (e, setRepositories, repositories) => {
           e.preventDefault();
-          if (searchStr === '') {
-            return;
-          }
           if (searchStr !== query) {
             // clear results with new search
             setQuery(searchStr);
@@ -53,12 +51,12 @@
           });
         }; 
         
-        const LoadMoreButton = ({ page, setPage, setRepositories, repositories, disabled }) => {
+        const LoadMoreButton = ({ setRepositories, repositories, disabled }) => {
           return (
             <button
               id="loadMoreButton"
               disabled={disabled}
-              onClick={(e) => searchGithub(e, setRepositories, page, setPage, repositories)}
+              onClick={(e) => searchGithub(e, setRepositories, repositories)}
             >
               Load more
             </button>
@@ -73,18 +71,17 @@
             />
             <button
               class="button-primary"
-              onClick={(e) => searchGithub(e, setRepositories, page, setPage, repositories)}
+              onClick={(e) => searchGithub(e, setRepositories, repositories)}
               type="submit"
+              disabled={searchStr === query || searchStr === ''}
             >
               Search
             </button>
             <LoadMoreButton
-              disabled={disableLoadMore}
+              disabled={searchStr === '' || disableLoadMore}
               setRepositories={setRepositories}
-              page={page}
-              setPage={setPage}
               repositories={repositories}
-              setTotal={setTotal} />
+            />
           </form>
         );
       }
@@ -136,15 +133,12 @@
 
       const App = () => {
         const [repositories, setRepositories] = useState([]);
-        const [page, setPage] = useState(1);
 
         return (
           <>
             <h1 class="title">GitHub Search</h1>
             <SearchForm
               setRepositories={setRepositories}
-              page={page}
-              setPage={setPage}
               repositories={repositories}
             />
             <SearchResults results={repositories} />
