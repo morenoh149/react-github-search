@@ -22,7 +22,7 @@
         const [searchStr, setSearchStr] = useState('');
         const [query, setQuery] = useState('');
         const [total, setTotal] = useState(0);
-        const per_page = 3; // 30
+        const per_page = 30; // 30
         let disableLoadMore = page * per_page >= total;
 
         /*
@@ -89,8 +89,9 @@
         );
       }
 
-      const row = ({name, language, stars}) => {
+      const row = ({count, name, language, stars}) => {
         return (<tr>
+          <td>{count}</td>
         <td>
           <a
             href="https://github.com/facebook/react"
@@ -108,7 +109,8 @@
         if (!results) {
           return
         }
-        let rows = results.map(r => row({
+        let rows = results.map((r, i) => row({
+          count: i+1,
           name:r.full_name,
           language:r.language,
           stars: r.stargazers_count >= 1000
@@ -119,6 +121,7 @@
           <table id="searchResults">
             <thead>
               <tr>
+                <th>Count</th>
                 <th>Name</th>
                 <th>Language</th>
                 <th>Stars</th>
