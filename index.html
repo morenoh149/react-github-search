@@ -82,6 +82,10 @@
               setRepositories={setRepositories}
               repositories={repositories}
             />
+            {query !== ''
+            ? <div>{total} results found for "{query}"</div>
+            : false
+          }
           </form>
         );
       }
@@ -89,17 +93,18 @@
       const row = ({count, name, language, stars}) => {
         return (<tr>
           <td>{count}</td>
-        <td>
-          <a
+          <td>
+            <a
             href="https://github.com/facebook/react"
             target="_blank"
-          >
-            {name}
-          </a>
-        </td>
-        <td>{language}</td>
-        <td>{stars}</td>
-      </tr>);
+            >
+              {name}
+            </a>
+          </td>
+          <td>{language}</td>
+          <td>{stars}</td>
+        </tr>
+        );
       }
 
       const SearchResults = ({results}) => {
